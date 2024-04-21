@@ -1,5 +1,7 @@
 from flask import render_template
-from app import app
+from . import create_app  # Import app factory function
+
+app = create_app()  # Create app instance
 
 @app.route('/')
 def index():
