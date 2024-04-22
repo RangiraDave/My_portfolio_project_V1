@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}University Application Copilot{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <h1> Welcome to University Application Copilot</h1>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/universities">Universities</a></li>
+                        <li><a href="/signup">Signup</a></li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <main>
+            <div class="container">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+        <footer>
+            <div class="container">
+                <p>&copy; 2024 University Application Copilot. All rights reserved.</p>
+            </div>
+        </footer>
+    </body>
+</html>

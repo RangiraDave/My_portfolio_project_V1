@@ -3,7 +3,7 @@
 This software is developed to assist African students who have completed their high-school studies and are unsure of their next steps. The website aims to simplify the process of university search and help students make informed decisions about the best universities for them.
 
 
-## Features:es:
+## Features:
 
 - University lookup: Users can search for universities based on various criteria such as location, programs offered, admission requirements, and more.
 - Personalized recommendations: The application provides personalized recommendations based on the user's academic background, interests, and preferences.
