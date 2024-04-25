@@ -1,5 +1,11 @@
-from flask import render_template
-from . import app  # Import app factory function
+#!/usr/bin/env python3
+# Module to define the routes used in the app
+
+from flask import redirect, render_template, url_for
+
+from app.models import User, db
+from . import app
+from .forms import LoginForm, SignupForm
 
 # app = create_app()  # Create app instance
 
@@ -7,13 +13,26 @@ from . import app  # Import app factory function
 def index():
     return render_template('home.html')
 
-@app.route('/login', strict_slashes=False)
+@app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login_route():
-    return render_template('login.html')
+    form = LoginForm()
+    return render_template('login.html', form=form)
 
-@app.route('/signup', strict_slashes=False)
+@app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup_route():
-    return render_template('signup.html')
+    form = SignupForm()
+    if form.validate_on_submit():
+        user = User(firstname=form.firstname.data,
+                lastname=form.lastname.data,
+                username=form.username.data,
+                phonenumber=form.phonenumber.data,
+                location=form.location.data,
+                gender=form.gender.data,
+                email=form.email.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('profile_route'))
+    return render_template('signup.html', form=form)
 
 @app.route('/profile', strict_slashes=False)
 def profile_route():

@@ -1,0 +1,3 @@
+flask db init # Initializing migrations.
+flask db migrate -m 'New changes applied successfully!!😊' # Migration creation.
+flask db upgrade # Applying migrations to database.

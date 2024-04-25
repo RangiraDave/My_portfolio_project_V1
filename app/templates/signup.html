@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Signup</h1>
-    <form method="POST" action="{{ url_for('signup') }}">
+    <form method="POST" action="{{ url_for('signup_route') }}">
         {{ form.csrf_token }}
         <div>
             {{ form.firstname.label }} {{ form.firstname() }}
