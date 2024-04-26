@@ -20,9 +20,11 @@ def login_route():
         user = User.query.filter_by(email=form.email.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid email or password')
+            print('Invalid email or password')
             return redirect(url_for('login_route'))
         else:
             flash('You are now logged in!')
+            print('You are now logged in!')
             return redirect(url_for('profile_route'))
     return render_template('login.html', form=form)
 
