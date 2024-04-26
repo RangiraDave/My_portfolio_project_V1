@@ -115,3 +115,10 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* Script Styles */
+script {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}

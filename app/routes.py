@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Module to define the routes used in the app
 
-from flask import redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for
 
 from app.models import User, db
 from . import app
@@ -16,6 +16,14 @@ def index():
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login_route():
     form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid email or password')
+            return redirect(url_for('login_route'))
+        else:
+            flash('You are now logged in!')
+            return redirect(url_for('profile_route'))
     return render_template('login.html', form=form)
 
 @app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
@@ -29,8 +37,12 @@ def signup_route():
                 location=form.location.data,
                 gender=form.gender.data,
                 email=form.email.data)
+        user.set_password(form.password.data)
+        user.check_password(form.password.data)
+
         db.session.add(user)
         db.session.commit()
+
         return redirect(url_for('profile_route'))
     return render_template('signup.html', form=form)
 
