@@ -41,6 +41,7 @@ def signup_route():
                 email=form.email.data)
         user.set_password(form.password.data)
         user.check_password(form.password.data)
+        user.check_password(form.confirm_password.data)
 
         db.session.add(user)
         db.session.commit()
