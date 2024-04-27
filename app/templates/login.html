@@ -6,18 +6,19 @@
         {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control") }}
+            {{ form.email(id="email", class="form-control", autocomplete="email") }}
             {% for error in form.email.errors %}
                 <span class="error">{{ error }}</span>
             {% endfor %}
         </div>
-        <div class="form-group">
+        <div id="password-group" class="form-group" style="display: none;">
             {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-            {% for error in form.password.errors %}
-                <span class="error">{{ error }}</span>
-            {% endfor %}
+            {{ form.password(class="form-control", autocomplete="current-password") }}
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <div id="email-message" class="form-group"></div>
+        <button id="login-button" type="submit" class="btn btn-primary">Login</button>
     </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='javascript/script.js') }}"></script>
 {% endblock %}
