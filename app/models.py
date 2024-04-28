@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 
+from wtforms import ValidationError
+
 
 db = SQLAlchemy()
 class User(db.Model):
@@ -24,6 +26,16 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username).first()
+        if user is not None:
+            raise ValidationError('Username already exists')
+        
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email).first()
+        if user is not None:
+            raise ValidationError('Email address already exists')
 
 class University(db.Model):
     id = db.Column(db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)

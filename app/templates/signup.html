@@ -11,7 +11,11 @@
             {{ form.lastname.label }} {{ form.lastname() }}
         </div>
         <div>
-            {{ form.username.label }} {{ form.username() }}
+            {{ form.username.label }}
+                {% if form.username.errors %}
+                    <p class="error">{{ form.username.errors[0] }}</p>
+                {% endif %}
+            {{ form.username() }}
         </div>
         <div>
             {{ form.phonenumber.label }} {{ form.phonenumber() }}
@@ -23,7 +27,11 @@
             {{ form.gender.label }} {{ form.gender() }}
         </div>
         <div>
-            {{ form.email.label }} {{ form.email() }}
+            {{ form.email.label }}
+                {% if form.email.errors %}
+                    <p class="error">{{ form.email.errors[0] }}</p>
+                {% endif %}
+            {{ form.email() }}
         </div>
         <div>
             {{ form.password.label }} {{ form.password() }}
