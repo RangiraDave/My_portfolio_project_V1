@@ -14,8 +14,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = tp
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.debug = True
 
+CHATGPT_API_KEY = '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'
+
 db.init_app(app)
 
 migrate = Migrate(app, db)
+
 
 from . import routes

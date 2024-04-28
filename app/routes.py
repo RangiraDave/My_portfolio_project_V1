@@ -2,12 +2,16 @@
 # Module to define the routes used in the app
 
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask_login import LoginManager, login_user, logout_user
 from sqlalchemy.exc import IntegrityError
-from app.models import User, db
+from app.models import University, User, db
 from . import app
 from .forms import LoginForm, SignupForm
+from werkzeug.security import generate_password_hash, check_password_hash
 
-# app = create_app()  # Create app instance
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 @app.route('/', strict_slashes=False)
 def index():
@@ -83,3 +87,50 @@ def check_email():
     email = request.args.get('email', '', type=str)
     user = User.query.filter_by(email=email).first()
     return jsonify({'exists': user is not None})
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
+def signup():
+    data = request.get_json()
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+    new_user = User(
+        username=data['username'],
+        email=data['email'],
+        password=hashed_password
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'Registered sucessfully!'})
+
+@app.route('/login', methods=['POST'], strict_slashes=False)
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(email=data['email']).first()
+    if user and check_password_hash(user.password, data['password']):
+        login_user(user)
+        return jsonify({'message': 'Logged in successfully!'})
+    return jsonify({'message': 'Invalid email or password'})
+
+@app.route('/logout', strict_slashes=False)
+def logout():
+    logout_user()
+    return jsonify({'message': 'Logged out successfully!'})
+
+@app.route('/account_recovery', strict_slashes=False)
+def account_recovery():
+    return jsonify({'message': 'Account recovery page'})
+@app.route('/universities', methods=['GET'], strict_slashes=False)
+def get_universities():
+    universities = University.query.all()
+    # def to_dict(self):
+    #     return {
+    #         'id': self.id,
+    #         'name': self.name,
+    #         'location': self.location,
+    #         'website': self.website,
+    #         'status': self.status
+    #     }
+    return jsonify([university.serialize() for university in universities])
