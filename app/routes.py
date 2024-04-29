@@ -2,16 +2,19 @@
 # Module to define the routes used in the app
 
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_user, logout_user, login_manager
+from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.exc import IntegrityError
 from app.models import University, User, db
-from . import app
+# from . import current_app
+from . import app, mail, login_manager
 from .forms import LoginForm, SignupForm
 from werkzeug.security import generate_password_hash, check_password_hash
+# from flask_email import Message
+from flask_mailman import EmailMessage
 
-
-login_manager = LoginManager()
-login_manager.init_app(app)
+# login_manager = LoginManager()
+# login_manager.init_app(current_app)
 
 @app.route('/', strict_slashes=False)
 def index():
@@ -134,3 +137,56 @@ def get_universities():
     #         'status': self.status
     #     }
     return jsonify([university.serialize() for university in universities])
+
+s = URLSafeTimedSerializer('ThisisasecretToHelpCreateProtectedTokens!')
+# mail = Mail()
+
+
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = s.dumps(email, salt='email-confirm')
+            msg = EmailMessage('Password Reset Request', from_email='noreply@univercityapplicationcopilot.com', to=[email])
+            link = url_for('reset_password_with_token', token=token, _external=True)
+            print(link)
+            msg.body = f'Please follow the password reset link to change your password: {link}'
+            mail.send_message(msg)
+            flash('A password reset link has been sent to your email.', 'info')
+        else:
+            flash('Email address not found.', 'warning')
+    return render_template('reset_password.html')
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password_with_token(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except:
+        flash('The password reset link is invalid or has expired.', 'warning')
+        return redirect(url_for('reset_password'))
+    if request.method == 'POST':
+        user = User.query.filter_by(email=email).first()
+        new_password = request.form['password']
+        
+        # Password validations
+        if len(new_password) < 6:
+            flash('Password must be at least 8 characters long.', 'warning')
+            return redirect(url_for('reset_password_with_token', token=token))
+        if not any(char.isdigit() for char in new_password):
+            flash('Password must contain at least one digit.', 'warning')
+            return redirect(url_for('reset_password_with_token', token=token))
+        if not any(char.isupper() for char in new_password):
+            flash('Password must contain at least one uppercase letter.', 'warning')
+            return redirect(url_for('reset_password_with_token', token=token))
+        if not any(char.islower() for char in new_password):
+            flash('Password must contain at least one lowercase letter.', 'warning')
+            return redirect(url_for('reset_password_with_token', token=token))
+        
+        hashed_password = generate_password_hash(new_password, method='sha256')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated!', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_password_with_token.html')
