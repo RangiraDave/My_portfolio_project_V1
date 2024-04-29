@@ -15,8 +15,6 @@ tp = 'mysql+pymysql://portfolio:Password%40123@localhost/application_copilot'
 app.config['SQLALCHEMY_DATABASE_URI'] = tp
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-CHATGPT_API_KEY = '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'
-
 
 db.init_app(app)
 migrate = Migrate(app, db)
