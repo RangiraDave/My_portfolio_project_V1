@@ -15,9 +15,12 @@ body {
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    background-color:black;
+    height: 40px;
+    position: fixed;
+    top:0px;
+    left: 0px;
+    width: 100%
 }
 
 /* Header Styles */
@@ -108,14 +111,27 @@ footer {
 }
 
 /* Links */
-a {
-    color: #007bff;
-    text-decoration: none;
-}
+nav ul {
+    list-style-type: none;
+    margin:0;
+    padding:0;
+  }  
 
-a:hover {
-    text-decoration: underline;
-}
+ li {
+    display: inline;
+  }
+  a {
+    color:white;
+    display: inline;
+  padding: 20px 20px;
+  text-decoration: none;
+  font-size: 20px;
+  }
+  nav ul li a:hover {
+    color: white;
+    background-color: aqua;
+  }
+
 
 /* Script Styles */
 script {
