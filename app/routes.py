@@ -1,17 +1,18 @@
-#!/usr/bin/env python3
-# Module to define the routes used in the app
-
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-from flask_login import LoginManager, login_required, login_user
+from flask_login import current_user, login_required, login_user
 from itsdangerous import URLSafeTimedSerializer
 from sqlalchemy.exc import IntegrityError
 from app.models import University, User, db
-# from . import current_app
 from . import app, mail, login_manager
 from .forms import LoginForm, SignupForm
 from werkzeug.security import generate_password_hash, check_password_hash
-# from flask_email import Message
 from flask_mailman import EmailMessage
+
+#!/usr/bin/env python3
+# Module to define the routes used in the app
+
+# from . import current_app
+# from flask_email import Message
 
 
 # login_manager = LoginManager()
@@ -19,10 +20,19 @@ from flask_mailman import EmailMessage
 
 @app.route('/', strict_slashes=False)
 def index():
-    return render_template('home.html')
+    """
+    Home page route.
+    """
+    return render_template(
+        'home.html',
+        user_logged_in=current_user.is_authenticated
+        )
 
 @app.route('/login', methods=['GET', 'POST'], strict_slashes=False)
 def login_route():
+    """
+    Login route.
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -40,6 +50,9 @@ def login_route():
 
 @app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup_route():
+    """
+    Signup route.
+    """
     form = SignupForm()
     if form.validate_on_submit():
         user_exists = User.query.filter_by(username=form.username.data).first()
@@ -72,8 +85,7 @@ def signup_route():
 @login_required
 def profile_route():
     """
-    A method to fetch data from the database and display it on
-    the profile page.
+    Profile route.
     """
     if 'email' not in session:
         return redirect(url_for('login_route'))
@@ -84,11 +96,15 @@ def profile_route():
         username=user.username,
         email=user.email,
         phone=user.phonenumber,
-        location=user.location
+        location=user.location,
+        user_logged_in=current_user.is_authenticated
         )
 
 @app.route('/logout', strict_slashes=False)
 def logout():
+    """
+    Logout route.
+    """
     session.pop('email', None)
     return redirect(url_for('login_route'))
 
@@ -105,6 +121,9 @@ def load_user(user_id):
 
 @app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup():
+    """
+    Signup route for API.
+    """
     data = request.get_json()
     hashed_password = generate_password_hash(data['password'], method='sha256')
     new_user = User(
@@ -117,8 +136,10 @@ def signup():
     return jsonify({'message': 'Registered sucessfully!'})
 
 @app.route('/login', methods=['POST'], strict_slashes=False)
-# @login_required
 def login():
+    """
+    Login route for API.
+    """
     data = request.get_json()
     user = User.query.filter_by(email=data['email']).first()
     if user and check_password_hash(user.password, data['password']):
@@ -126,25 +147,26 @@ def login():
         return jsonify({'message': 'Logged in successfully!'})
     return jsonify({'message': 'Invalid email or password'})
 
-# @app.route('/logout', strict_slashes=False)
-# def logout():
-#     logout_user()
-#     return redirect(url_for('login_route'))
-
-# @app.route('/account_recovery', strict_slashes=False)
-# def account_recovery():
-#     return jsonify({'message': 'Account recovery page'})
-
 @app.route('/universities', methods=['GET'], strict_slashes=False)
 @login_required
 def get_universities():
+    """
+    Route to get universities.
+    """
     search_results = University.query.all()
-    return render_template('universities.html', search_results=search_results)
+    return render_template(
+        'universities.html',
+        search_results=search_results,
+        user_logged_in=current_user.is_authenticated
+        )
 
 # An object to Help create tokens.
 s = URLSafeTimedSerializer('ThisisasecretToHelpCreateProtectedTokens!')
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
+    """
+    Route to reset password.
+    """
     if request.method == 'POST':
         email = request.form['email']
         user = User.query.filter_by(email=email).first()
@@ -158,10 +180,16 @@ def reset_password():
             flash('A password reset link has been sent to your email.', 'info')
         else:
             flash('Email address not found.', 'warning')
-    return render_template('reset_password.html')
+    return render_template(
+        'reset_password.html',
+        user_logged_in=current_user.is_authenticated
+        )
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password_with_token(token):
+    """
+    Route to reset password with token.
+    """
     try:
         email = s.loads(token, salt='email-confirm', max_age=3600)
     except:
