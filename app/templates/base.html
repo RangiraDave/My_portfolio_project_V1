@@ -13,11 +13,22 @@
         <header>
             <div class="container">
                 <!-- <h1> Welcome to University Application Copilot</h1> -->
+<<<<<<< HEAD
                 <nav class="navu">
                         <a href="/">Home</a>
+=======
+                <nav>
+                    <a href="/">Home</a>
+                    {% if user_logged_in %}
+>>>>>>> 1f6f7b47baa4002f2bf433faf00648ab5225399e
                         <a href="/universities">Universities</a>
+                        <a href="/profile">Profile</a>
+                        <a href="/logout">Logout</a>
+                    {% else %}
+                        <!-- <a href="/home">Home</a> -->
                         <a href="/signup">Signup</a>
                         <a href="/login">Login</a>
+                    {% endif %}
                 </nav>
             </div>
             </br> <br>

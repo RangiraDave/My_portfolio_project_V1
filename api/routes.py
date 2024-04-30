@@ -2,6 +2,7 @@
 """ Module for api routes. """
 
 from flask import jsonify, request
+from flask_login import login_required
 from itsdangerous import URLSafeTimedSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 import app
@@ -30,6 +31,7 @@ def signup():
     return jsonify({'message': 'User signed up successfully'}), 201
 
 @app.route('/api/login', methods=['POST'], strict_slashes=False)
+@login_required
 def login():
     """ Route for logging in a user. """
     data = request.get_json()
