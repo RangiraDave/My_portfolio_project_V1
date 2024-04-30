@@ -24,6 +24,7 @@ header {
     color: #fff;
     padding: 10px 0;
     text-align: center;
+    height: 9%;
 }
 
 /* Headers */
@@ -102,7 +103,7 @@ footer {
     color: #fff;
     padding: 10px 0;
     text-align: center;
-    height: 10%;
+    height: 9%;
 }
 
 /* Links */
@@ -116,16 +117,23 @@ nav ul {
     display: inline;
   }
   a {
-    color:white;
+    color:#1221a8;
     display: inline;
   padding: 20px 20px;
   text-decoration: none;
   font-size: 20px;
   }
-  nav ul li a:hover {
+  nav a:hover {
     color: white;
-    background-color: aqua;
+    background-color: #333;
+    transition: background-size 0.3s;
+    background-size: 30%;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
   }
+a:hover {
+    text-decoration: underline;
+}
 
 
 /* Script Styles */

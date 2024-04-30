@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from flask_email import Message
 from flask_mailman import EmailMessage
 
+
 # login_manager = LoginManager()
 # login_manager.init_app(current_app)
 
@@ -125,9 +126,10 @@ def logout():
 @app.route('/account_recovery', strict_slashes=False)
 def account_recovery():
     return jsonify({'message': 'Account recovery page'})
+
 @app.route('/universities', methods=['GET'], strict_slashes=False)
 def get_universities():
-    universities = University.query.all()
+    # universities = University.query.all()
     # def to_dict(self):
     #     return {
     #         'id': self.id,
@@ -136,7 +138,8 @@ def get_universities():
     #         'website': self.website,
     #         'status': self.status
     #     }
-    return jsonify([university.serialize() for university in universities])
+    search_results = University.query.all()
+    return render_template('universities.html', search_results=search_results)
 
 s = URLSafeTimedSerializer('ThisisasecretToHelpCreateProtectedTokens!')
 # mail = Mail()

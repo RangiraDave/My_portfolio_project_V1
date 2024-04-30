@@ -3,24 +3,15 @@
 {% block content %}
     <h1>University Search Results</h1>
     
-    <table>
-        <thead>
-            <tr>
-                <th>University Name</th>
-                <th>Location</th>
-                <th>Web Site</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in search_results %}
-            <tr>
-                <td>{{ result.university_name }}</td>
-                <td>{{ result.location }}</td>
-                <td>{{ result.website }}</td>
-                <td>{{ result.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <ul>
+        {% for result in search_results %}
+        <li>
+            <p><strong>University Name:</strong> {{ result.name }}<br>
+            <strong>Location:</strong> {{ result.location }}<br>
+            <strong>Web Site:</strong> <a href="{{ result.website }}">{{ result.website }}</a><br>
+            <strong>Status:</strong> {{ result.status }}
+            </p>
+        </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
