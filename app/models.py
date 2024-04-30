@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # Module to define the models used in the app
 
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
-
 from wtforms import ValidationError
 
 
 db = SQLAlchemy()
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
     # id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True, unique=True, nullable=False)
@@ -36,6 +36,13 @@ class User(db.Model):
         user = User.query.filter_by(email=email).first()
         if user is not None:
             raise ValidationError('Email address already exists')
+        
+    @property
+    def is_active(self):
+        return True
+    
+    def get_id(self):
+        return self.id
 
 class University(db.Model):
     id = db.Column(db.String(36), default=lambda: str(uuid.uuid4()), primary_key=True)
