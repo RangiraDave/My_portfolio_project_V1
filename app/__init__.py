@@ -10,7 +10,7 @@ from .models import db
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'uruni_urufunguzo_ruhishe'
+
 tp = 'mysql+pymysql://portfolio:Password%40123@localhost/application_copilot'
 app.config['SQLALCHEMY_DATABASE_URI'] = tp
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
