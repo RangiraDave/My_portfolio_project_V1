@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+""" Module to define the routes used in the app. """
+
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user
 from itsdangerous import URLSafeTimedSerializer
@@ -8,8 +11,6 @@ from .forms import LoginForm, SignupForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mailman import EmailMessage
 
-#!/usr/bin/env python3
-# Module to define the routes used in the app
 
 # from . import current_app
 # from flask_email import Message
@@ -37,7 +38,7 @@ def login_route():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.check_password(form.password.data):
-            # session['email'] = form.email.data
+            session['email'] = form.email.data
             login_user(user)
             flash('You are now logged in!')
             print('You are now logged in!')

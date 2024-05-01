@@ -5,7 +5,7 @@
     background-size: 500px 650px;
   }
 
-.navu {
+.nav {
     background-color:black;
     height: 45px;
     position: fixed;
@@ -17,10 +17,11 @@
 .navu a:hover{
     color: white;
     background-color: aqua;
+    text-decoration: underline;
 }
 
 a {
-    color:white;
+    color:rgb(38, 2, 245);
     display: inline;
     padding: 20px 20px;
     text-decoration: none;
@@ -34,7 +35,7 @@ a {
   }
 
 .h11{
-animation: move 15s linear infinite;
+/* animation: move 15s linear infinite; */
 color:green;
 }
 .bt{
