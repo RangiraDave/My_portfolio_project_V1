@@ -1,15 +1,22 @@
 #!/usr/bin/env python3
 """ Module to define the routes used in the app. """
 
+import os
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user
 from itsdangerous import URLSafeTimedSerializer
+from openai import OpenAI, RateLimitError
+
+# client = OpenAI()
 from sqlalchemy.exc import IntegrityError
 from app.models import University, User, db
 from . import app, mail, login_manager
 from .forms import LoginForm, SignupForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mailman import EmailMessage
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
 # from . import current_app
@@ -90,7 +97,7 @@ def profile_route():
     """
     if 'email' not in session:
         return redirect(url_for('login_route'))
-    
+
     user = User.query.filter_by(email=session['email']).first()
     return render_template(
         'profile.html',
@@ -199,7 +206,7 @@ def reset_password_with_token(token):
     if request.method == 'POST':
         user = User.query.filter_by(email=email).first()
         new_password = request.form['password']
-        
+
         # Password validations
         if len(new_password) < 6:
             flash('Password must be at least 8 characters long.', 'warning')
@@ -213,10 +220,34 @@ def reset_password_with_token(token):
         if not any(char.islower() for char in new_password):
             flash('Password must contain at least one lowercase letter.', 'warning')
             return redirect(url_for('reset_password_with_token', token=token))
-        
+
         hashed_password = generate_password_hash(new_password, method='sha256')
         user.password = hashed_password
         db.session.commit()
         flash('Your password has been updated!', 'success')
         return redirect(url_for('login'))
     return render_template('reset_password_with_token.html')
+
+@app.route('/search', methods=['GET'], strict_slashes=False)
+def search():
+    """
+    Route to help search for the perfect university.
+    """
+    question = request.args.get('question')
+    try:
+        response = client.chat.completions.create(model='gpt-3.5-turbo',
+        messages=[
+            {
+                'role': 'system',
+                'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
+            },
+            {
+                'role': 'user',
+                'content': question
+            }
+        ])
+        return jsonify(answer=response.choices[0].text.strip())
+        # return render_template('search.html', answer=response.choices[0].text.strip())
+    except RateLimitError:
+        error_message = "Sorry, the search feature is currently unavailable due to high demand. Please try again later."
+        return render_template('error.html', error_message=error_message)

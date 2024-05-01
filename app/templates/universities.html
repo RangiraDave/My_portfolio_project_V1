@@ -1,17 +1,29 @@
-{% extends 'base.html' %}
-
 {% block content %}
-    <h1>University Search Results</h1>
-    
-    <ul>
-        {% for result in search_results %}
-        <li>
-            <p><strong>University Name:</strong> {{ result.name }}<br>
-            <strong>Location:</strong> {{ result.location }}<br>
-            <strong>Web Site:</strong> <a href="{{ result.website }}">{{ result.website }}</a><br>
-            <strong>Status:</strong> {{ result.status }}
-            </p>
-        </li>
-        {% endfor %}
-    </ul>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/javascript/script.js"></script>
+    <div style="display: flex;">
+        <div style="flex: 1;">
+            <h1>University Search Results</h1>
+            
+            <ul>
+                {% for result in search_results %}
+                <li>
+                    <p><strong>University Name:</strong> {{ result.name }}<br>
+                    <strong>Location:</strong> {{ result.location }}<br>
+                    <strong>Web Site:</strong> <a href="{{ result.website }}">{{ result.website }}</a><br>
+                    <strong>Status:</strong> {{ result.status }}
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card">
+                <h2>Ask a question</h2>
+                <input type="text" id="question" placeholder="Ask a question...">
+                <button id="search">Search</button>
+                <div id="answer"></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

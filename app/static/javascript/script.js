@@ -16,4 +16,20 @@ $(document).ready(function() {
             }
         });
     });
+
+    // Adding the search button click handler
+    $('#search').click(function() {
+        console.log('Search button clicked!')
+        var question = $('#question').val();
+        console.log('Question:', question);
+        $.ajax({
+            url: '/search',
+            data: { 'question': question },
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                $('#answer').html(response.answer);
+            }
+        });
+    });
 });
