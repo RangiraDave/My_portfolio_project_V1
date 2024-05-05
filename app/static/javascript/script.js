@@ -27,8 +27,11 @@ $(document).ready(function() {
             data: { 'question': question },
             type: 'GET',
             success: function(response) {
-                console.log(response);
-                $('#answer').html(response.answer);
+                if (response.success) {
+                    $('#answer')(response);
+                } else {
+                    $('#answer')('An error ocured while searching for the answer.' + response.error);
+                }
             }
         });
     });

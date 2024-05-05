@@ -9,25 +9,6 @@ from app.models import User
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Verify Email')
-
-    def validate_email(form, field):
-        """ Check if the email exists in the User table. """
-        if not User.query.filter_by(email=field.data).first():
-            raise ValidationError('Email does not exist')
-
-    def validate_password(form, field):
-        """ Check if the email and password combination is correct. """
-        if not form.email.errors and not User.query.filter_by(email=form.email.data, password=field.data).first():
-            raise ValidationError('Incorrect password')
-
-    @property
-    def password(self):
-        """ Getter method for the password field. """
-        return PasswordField('Password', validators=[DataRequired()])
-
-class LoginForm(FlaskForm):
     """
     Represents the login form.
 

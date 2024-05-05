@@ -12,19 +12,12 @@ from sqlalchemy.exc import IntegrityError
 from app.models import University, User, db
 from . import app, mail, login_manager
 from .forms import LoginForm, SignupForm
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from flask_mailman import EmailMessage
 from openai import OpenAI
 
+
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-
-
-# from . import current_app
-# from flask_email import Message
-
-
-# login_manager = LoginManager()
-# login_manager.init_app(current_app)
 
 @app.route('/', strict_slashes=False)
 def index():
@@ -51,9 +44,9 @@ def login_route():
             print('You are now logged in!')
             return redirect(url_for('profile_route'))
         else:
-            flash('Invalid email or password')
+            flash('Invalid email or password', 'error')
             print('Invalid email or password')
-            return redirect(url_for('login_route'))
+            return redirect(url_for('login_route'), code=401)
     return render_template('login.html', form=form)
 
 @app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
@@ -126,34 +119,6 @@ def check_email():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
-
-@app.route('/signup', methods=['GET', 'POST'], strict_slashes=False)
-def signup():
-    """
-    Signup route for API.
-    """
-    data = request.get_json()
-    hashed_password = generate_password_hash(data['password'], method='sha256')
-    new_user = User(
-        username=data['username'],
-        email=data['email'],
-        password=hashed_password
-    )
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({'message': 'Registered sucessfully!'})
-
-@app.route('/login', methods=['POST'], strict_slashes=False)
-def login():
-    """
-    Login route for API.
-    """
-    data = request.get_json()
-    user = User.query.filter_by(email=data['email']).first()
-    if user and check_password_hash(user.password, data['password']):
-        login_user(user)
-        return jsonify({'message': 'Logged in successfully!'})
-    return jsonify({'message': 'Invalid email or password'})
 
 @app.route('/universities', methods=['GET'], strict_slashes=False)
 @login_required
@@ -237,10 +202,10 @@ def search():
     try:
         response = client.chat.completions.create(model='gpt-3.5-turbo',
         messages=[
-            {
-                'role': 'system',
-                'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
-            },
+            # {
+            #     'role': 'system',
+            #     'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
+            # },
             {
                 'role': 'user',
                 'content': question
