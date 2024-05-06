@@ -28,9 +28,9 @@ $(document).ready(function() {
             type: 'GET',
             success: function(response) {
                 if (response.success) {
-                    $('#answer')(response);
+                    $('#answer').html(response.answer);
                 } else {
-                    $('#answer')('An error ocured while searching for the answer.' + response.error);
+                    $('#answer').html(`An error ocured while searching for the answer.${response.error}`);
                 }
             }
         });

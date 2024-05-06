@@ -202,17 +202,17 @@ def search():
     try:
         response = client.chat.completions.create(model='gpt-3.5-turbo',
         messages=[
-            # {
-            #     'role': 'system',
-            #     'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
-            # },
+            {
+                'role': 'system',
+                'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
+            },
             {
                 'role': 'user',
                 'content': question
             }
         ])
-        return jsonify(answer=response.choices[0].text.strip())
-        # return render_template('search.html', answer=response.choices[0].text.strip())
+        print(response)
+        return jsonify(success=True, answer=response.choices[0].text.strip())
     except RateLimitError:
         error_message = "Sorry, the search feature is currently unavailable due to high demand. Please try again later."
-        return render_template('error.html', error_message=error_message)
+        return jsonify(success=False, error=error_message)
