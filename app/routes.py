@@ -211,7 +211,7 @@ def search():
                 'content': question
             }
         ])
-        print(response)
+        print('Response got is: ', response)
         return jsonify(success=True, answer=response.choices[0].text.strip())
     except RateLimitError:
         error_message = "Sorry, the search feature is currently unavailable due to high demand. Please try again later."
