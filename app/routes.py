@@ -199,20 +199,25 @@ def search():
     Route to help search for the perfect university.
     """
     question = request.args.get('question')
-    try:
-        response = client.chat.completions.create(model='gpt-3.5-turbo',
-        messages=[
-            {
-                'role': 'system',
-                'content': 'I am looking for a university in the Africa that suits my desires. Can you help me?'
-            },
-            {
-                'role': 'user',
-                'content': question
-            }
-        ])
-        print('Response got is: ', response)
-        return jsonify(success=True, answer=response.choices[0].text.strip())
-    except RateLimitError:
-        error_message = "Sorry, the search feature is currently unavailable due to high demand. Please try again later."
-        return jsonify(success=False, error=error_message)
+    while True:
+        try:
+            jls_extract_var = 'I am looking for a university in \
+                the Africa that suits my desires. Can you help me?'
+            response = client.chat.completions.create(model='gpt-3.5-turbo',
+            messages=[
+                {
+                    'role': 'system',
+                    'content': jls_extract_var
+                },
+                {
+                    'role': 'user',
+                    'content': question
+                }
+            ])
+            print('Response got is: ', response)
+            return jsonify(success=True, answer=response.choices[0].text.strip())
+        except RateLimitError:
+            error_message = "Sorry,\
+                the search feature is currently unavailable \
+                due to high demand. Please try again later."
+            return jsonify(success=False, error=error_message)
