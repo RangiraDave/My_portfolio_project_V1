@@ -1,46 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Signup</h1>
-    <form method="POST" action="{{ url_for('signup_route') }}">
-        {{ form.csrf_token }}
-        <div>
-            {{ form.firstname.label }} {{ form.firstname() }}
+    <!-- <div class="container"> -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1>Signup</h1>
+            <form method="POST" action="{{ url_for('signup_route') }}">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.firstname.label }} {{ form.firstname() }}
+                </div>
+                <div class="form-group">
+                    {{ form.lastname.label }} {{ form.lastname() }}
+                </div>
+                <div class="form-group">
+                    {{ form.username.label }}
+                        {% if form.username.errors %}
+                            <p class="error">{{ form.username.errors[0] }}</p>
+                        {% endif %}
+                    {{ form.username() }}
+                </div>
+                <div class="form-group">
+                    {{ form.phonenumber.label }} {{ form.phonenumber() }}
+                </div>
+                <div class="form-group">
+                    {{ form.location.label }} {{ form.location() }}
+                </div>
+                <div class="form-group">
+                    {{ form.gender.label }} {{ form.gender() }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                        {% if form.email.errors %}
+                            <p class="error">{{ form.email.errors[0] }}</p>
+                        {% endif %}
+                    {{ form.email() }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }} {{ form.password() }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label }} {{ form.confirm_password() }}
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Signup" class="btn btn-primary">
+                </div>
+            </form>
         </div>
-        <div>
-            {{ form.lastname.label }} {{ form.lastname() }}
-        </div>
-        <div>
-            {{ form.username.label }}
-                {% if form.username.errors %}
-                    <p class="error">{{ form.username.errors[0] }}</p>
-                {% endif %}
-            {{ form.username() }}
-        </div>
-        <div>
-            {{ form.phonenumber.label }} {{ form.phonenumber() }}
-        </div>
-        <div>
-            {{ form.location.label }} {{ form.location() }}
-        </div>
-        <div>
-            {{ form.gender.label }} {{ form.gender() }}
-        </div>
-        <div>
-            {{ form.email.label }}
-                {% if form.email.errors %}
-                    <p class="error">{{ form.email.errors[0] }}</p>
-                {% endif %}
-            {{ form.email() }}
-        </div>
-        <div>
-            {{ form.password.label }} {{ form.password() }}
-        </div>
-        <div>
-            {{ form.confirm_password.label }} {{ form.confirm_password() }}
-        </div>
-        <div>
-            <input type="submit" value="Signup">
-        </div>
-    </form>
+    </div>
+    <!-- </div> -->
 {% endblock %}

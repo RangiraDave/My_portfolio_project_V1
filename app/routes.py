@@ -25,7 +25,7 @@ def index():
     Home page route.
     """
     return render_template(
-        'home.html',
+        'about.html',
         user_logged_in=current_user.is_authenticated
         )
 
