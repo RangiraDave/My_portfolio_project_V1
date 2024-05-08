@@ -133,6 +133,58 @@ def get_universities():
         user_logged_in=current_user.is_authenticated
         )
 
+@app.route('/like', methods=['POST'], strict_slashes=False)
+@login_required
+def like():
+    """
+    Route to handle liking of a university.
+    This will update the university's rate field, and
+    add a new row in the UserPriferences table.
+    """
+    if request.method == 'POST':
+        university_id = request.form.get('university_id')
+        user_id = current_user.id
+
+        # Check if the user has already liked the university
+        # if they do, do nothing.
+        exists_like = UserPreferences.query.filter_by(
+            user_id=user_id, university_id=university_id).first()
+        if exists_like:
+            return jsonify({'success': False})
+        else:
+            like = UserPreferences(user_id=user_id, university_id=university_id)
+            db.session.add(like)
+            db.session.commit()
+            return jsonify({'success': True})
+
+@app.route('/dislike', methods=['POST'], strict_slashes=False)
+@login_required
+def dislike():
+    """
+    Route to handle disliking of a university.
+    This will update the university's rate field, and
+    remove a row in the UserPriferences table if exists.
+    """
+    if request.method == 'POST':
+        university_id = request.form.get('university_id')
+        user_id = current_user.id
+
+        # Check if the user has already dislikes this university
+        # if they do, remove the dislike.
+        exists_dislike = UserPreferences.query.filter_by(
+            user_id=user_id, university_id=university_id).first()
+        if exists_dislike:
+            # Removing the dislike
+            db.session.delete(exists_dislike)
+            db.session.commit()
+            return jsonify({'success': True})
+        else:
+            dislike = UserPreferences(user_id=user_id,
+            university_id=university_id)
+            db.session.add(dislike)
+            db.session.commit()
+            return jsonify({'success': True})
+
 # An object to Help create tokens.
 s = URLSafeTimedSerializer('ThisisasecretToHelpCreateProtectedTokens!')
 @app.route('/reset_password', methods=['GET', 'POST'])
