@@ -54,3 +54,4 @@ echo "export SECRET_KEY=..." >> ~/.bashrc
 # adding openai's api key to the ~/.bashrc file
 echo "export OPENAI_API_KEY=sk-proj-..." >> ~/.bashrc
 
+# Crea
