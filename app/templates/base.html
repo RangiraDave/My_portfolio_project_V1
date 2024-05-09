@@ -11,7 +11,7 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        <header>
+        <header class="header">
             <a href="/">About</a>
             {% if user_logged_in %}
                 <a href="/">Home</a>
@@ -24,12 +24,8 @@
                 <a href="/login">Login</a>
             {% endif %}
         </header>
-        <main>
-            <section>
                 {% block content %}
                 {% endblock %}
-            </section>
-        </main>
         <footer>
             &copy; 2024 University Application Copilot. All rights reserved.
         </footer>

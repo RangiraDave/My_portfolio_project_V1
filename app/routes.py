@@ -9,7 +9,7 @@ from openai import OpenAI, RateLimitError
 
 # client = OpenAI()
 from sqlalchemy.exc import IntegrityError
-from app.models import University, User, db
+from app.models import University, User, UserPreference, db
 from . import app, mail, login_manager
 from .forms import LoginForm, SignupForm
 from werkzeug.security import generate_password_hash
@@ -143,16 +143,20 @@ def like():
     """
     if request.method == 'POST':
         university_id = request.form.get('university_id')
+        # name = request.form.get('name')
         user_id = current_user.id
 
         # Check if the user has already liked the university
         # if they do, do nothing.
-        exists_like = UserPreferences.query.filter_by(
+        exists_like = UserPreference.query.filter_by(
             user_id=user_id, university_id=university_id).first()
         if exists_like:
             return jsonify({'success': False})
         else:
-            like = UserPreferences(user_id=user_id, university_id=university_id)
+            like = UserPreference(
+                user_id=user_id,
+                university_id=university_id
+                )
             db.session.add(like)
             db.session.commit()
             return jsonify({'success': True})
@@ -171,7 +175,7 @@ def dislike():
 
         # Check if the user has already dislikes this university
         # if they do, remove the dislike.
-        exists_dislike = UserPreferences.query.filter_by(
+        exists_dislike = UserPreference.query.filter_by(
             user_id=user_id, university_id=university_id).first()
         if exists_dislike:
             # Removing the dislike
@@ -179,7 +183,7 @@ def dislike():
             db.session.commit()
             return jsonify({'success': True})
         else:
-            dislike = UserPreferences(user_id=user_id,
+            dislike = UserPreference(user_id=user_id,
             university_id=university_id)
             db.session.add(dislike)
             db.session.commit()

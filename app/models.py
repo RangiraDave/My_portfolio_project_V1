@@ -61,6 +61,7 @@ class University(db.Model):
     location = db.Column(db.String(120), nullable=False)
     website = db.Column(db.String(120))
     status = db.Column(db.String(20), default='closed')
+    rate = db.relationship('UserPreference', backref='university', lazy=True)
 
 class UserPreference(db.Model):
     """Class representing a user's preference in the app."""
@@ -69,3 +70,4 @@ class UserPreference(db.Model):
     # id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'))
     university_id = db.Column(db.String(36), db.ForeignKey('university.id'))
+    name = db.Column(db.String(120), nullable=True)
