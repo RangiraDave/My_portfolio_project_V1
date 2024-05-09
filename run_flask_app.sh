@@ -8,4 +8,7 @@ source ~/.bashrc
 source venv/bin/activate
 
 # Running the flask app
-flask run --host=0.0.0.0 --port=5000
+# flask run --host=0.0.0.0 --port=5000
+
+# Running flask app using gunicorn
+gunicorn -b 0.0.0.0:5000 -w 4 app:app
