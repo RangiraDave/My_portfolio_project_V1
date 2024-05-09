@@ -11,4 +11,4 @@ source venv/bin/activate
 # flask run --host=0.0.0.0 --port=5000
 
 # Running flask app using gunicorn
-/usr/bin/python3 gunicorn -b 0.0.0.0:5000 -w 4 app:app
+venv/bin/gunicorn -b 0.0.0.0:5000 -w 4 app:app
