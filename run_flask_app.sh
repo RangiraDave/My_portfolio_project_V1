@@ -2,10 +2,10 @@
 # Script to automate the process of starting the flask application
 
 # Run the environment variables in this session
-source ~/.bashrc
+sudo source ~/.bashrc
 
 # Running the virtual environment
-source venv/bin/activate
+sudo source venv/bin/activate
 
 # Running the flask app
 # flask run --host=0.0.0.0 --port=5000
@@ -17,4 +17,4 @@ pip install -r requirements.txt -q
 pip install gunicorn -q
 
 # Running flask app using gunicorn
-venv/bin/gunicorn -b 0.0.0.0:5000 -w 4 app:app
+sudo venv/bin/gunicorn -b 0.0.0.0:5000 -w 4 app:app
