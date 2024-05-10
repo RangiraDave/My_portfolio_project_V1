@@ -11,7 +11,7 @@ source venv/bin/activate
 # flask run --host=0.0.0.0 --port=5000
 
 # Quietly install requirements
-pip install -r -q requirements.txt
+pip install -r requirements.txt -q
 
 # Installing gunicorn
 pip install gunicorn -q
