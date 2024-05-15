@@ -159,7 +159,6 @@ sqlparse==0.4.4
 ssh-import-id==5.11
 # systemd-python==234
 tomli==2.0.1
-torbrowser-launcher==0.3.3
 tqdm==4.66.2
 typing_extensions==4.8.0
 ubuntu-drivers-common==0.0.0
