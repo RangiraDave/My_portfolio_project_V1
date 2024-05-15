@@ -161,8 +161,8 @@ ssh-import-id==5.11
 tomli==2.0.1
 tqdm==4.66.2
 typing_extensions==4.8.0
-ubuntu-drivers-common==0.0.0
-ubuntu-pro-client==8001
+# ubuntu-drivers-common==0.0.0
+# ubuntu-pro-client==8001
 ufw==0.36.1
 unattended-upgrades==0.1
 uritemplate==4.1.1
