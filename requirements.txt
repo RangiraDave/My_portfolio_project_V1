@@ -61,7 +61,7 @@ google-api-core==2.19.0
 google-auth==2.29.0
 google-cloud-dialogflow==2.30.0
 googleapis-common-protos==1.63.0
-gpg==1.16.0
+# gpg==1.16.0
 greenlet==3.0.3
 grpcio==1.63.0
 grpcio-status==1.62.2
