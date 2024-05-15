@@ -174,9 +174,9 @@ wrapt==1.16.0
 WTForms==3.1.2
 xdg==5
 xdis==6.0.5
-xkit==0.0.0
-zipp==1.0.0
-zope.component==4.3.0
-zope.event==4.4
-zope.hookable==5.1.0
-zope.interface==5.4.0
+# xkit==0.0.0
+# zipp==1.0.0
+# zope.component==4.3.0
+# zope.event==4.4
+# zope.hookable==5.1.0
+# zope.interface==5.4.0
