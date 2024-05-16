@@ -166,3 +166,29 @@ footer {
     background-color: #f8f5f5;
     border-bottom: 0px;
   }
+
+.background-image {
+    background-image: url('../assets/img/b.jpg');
+    object-fit: contain;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+    overflow-x: overlay;
+    overflow-y: hidden;
+}
+
+.form-p {
+  background-color: #fff;
+  margin: auto;
+  width: 50%;
+  border: 2px solid #ccc;
+  padding: 20px;
+  padding-top: 20%;
+  padding-bottom: 20%;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: var(--text-color);
+}
